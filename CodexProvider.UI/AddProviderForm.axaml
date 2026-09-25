@@ -1,0 +1,45 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="CodexProvider.UI.AddProviderForm"
+        Title="Add provider"
+        Width="430" Height="320"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        Background="#1E1E29">
+
+  <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*" ColumnDefinitions="130,*" Margin="16,12,16,12">
+
+    <TextBlock Grid.Row="0" Grid.Column="0" Text="ID (no spaces):" VerticalAlignment="Center" Foreground="#9C9CB4"/>
+    <TextBox x:Name="TxtId" Grid.Row="0" Grid.Column="1" Margin="0,3" Background="#303045" Foreground="#EDEDF5" BorderBrush="#3A3A52" CornerRadius="6"/>
+
+    <TextBlock Grid.Row="1" Grid.Column="0" Text="Display name:" VerticalAlignment="Center" Foreground="#9C9CB4"/>
+    <TextBox x:Name="TxtName" Grid.Row="1" Grid.Column="1" Margin="0,3" Background="#303045" Foreground="#EDEDF5" BorderBrush="#3A3A52" CornerRadius="6"/>
+
+    <TextBlock Grid.Row="2" Grid.Column="0" Text="Base URL:" VerticalAlignment="Center" Foreground="#9C9CB4"/>
+    <TextBox x:Name="TxtUrl" Grid.Row="2" Grid.Column="1" Margin="0,3" Text="https://" Background="#303045" Foreground="#EDEDF5" BorderBrush="#3A3A52" CornerRadius="6"/>
+
+    <TextBlock Grid.Row="3" Grid.Column="0" Text="Wire API:" VerticalAlignment="Center" Foreground="#9C9CB4"/>
+    <ComboBox x:Name="CmbWire" Grid.Row="3" Grid.Column="1" Margin="0,3" Width="140" HorizontalAlignment="Left"
+              SelectedIndex="0" Background="#303045" Foreground="#EDEDF5">
+      <ComboBoxItem Content="responses"/>
+      <ComboBoxItem Content="chat"/>
+    </ComboBox>
+
+    <TextBlock Grid.Row="4" Grid.Column="0" Text="Key env var name:" VerticalAlignment="Center" Foreground="#9C9CB4"/>
+    <TextBox x:Name="TxtEnvKey" Grid.Row="4" Grid.Column="1" Margin="0,3" Background="#303045" Foreground="#EDEDF5" BorderBrush="#3A3A52" CornerRadius="6"/>
+
+    <TextBlock Grid.Row="5" Grid.Column="0" Text="API key (paste):" VerticalAlignment="Center" Foreground="#9C9CB4"/>
+    <TextBox x:Name="TxtApiKey" Grid.Row="5" Grid.Column="1" Margin="0,3" PasswordChar="*" Watermark="optional - stored in user env"
+             Background="#303045" Foreground="#EDEDF5" BorderBrush="#3A3A52" CornerRadius="6"/>
+
+    <TextBlock Grid.Row="6" Grid.Column="0" Text="Default model:" VerticalAlignment="Center" Foreground="#9C9CB4"/>
+    <TextBox x:Name="TxtModel" Grid.Row="6" Grid.Column="1" Margin="0,3" Background="#303045" Foreground="#EDEDF5" BorderBrush="#3A3A52" CornerRadius="6"/>
+
+    <TextBlock Grid.Row="7" Grid.Column="1" Text="paste a key here to set/update the env var" FontSize="10.5" Foreground="#9C9CB4"/>
+
+    <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Spacing="8">
+      <Button x:Name="BtnOk" Content="Save" Width="82" Height="30" Background="#7C6CF0" Foreground="White" CornerRadius="8" Click="OnSave"/>
+      <Button x:Name="BtnCancel" Content="Cancel" Width="80" Height="30" Background="#33334A" Foreground="#EDEDF5" CornerRadius="8" Click="OnCancel"/>
+    </StackPanel>
+  </Grid>
+</Window>

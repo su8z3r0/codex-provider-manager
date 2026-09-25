@@ -1,0 +1,213 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="580" d:DesignHeight="640"
+        x:Class="CodexProvider.UI.MainWindow"
+        Title="Codex Provider Manager"
+        Width="580" Height="640" MinWidth="572" MinHeight="640"
+        Background="#1E1E29"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="PreferSystemChrome"
+        ExtendClientAreaTitleBarHeightHint="38">
+
+  <Window.Styles>
+    <!-- theme-consistent list selection (purple) instead of the Fluent default teal -->
+    <Style Selector="ListBoxItem">
+      <Setter Property="Padding" Value="0"/>
+      <Setter Property="MinHeight" Value="30"/>
+    </Style>
+    <Style Selector="ListBoxItem /template/ ContentPresenter">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="CornerRadius" Value="6"/>
+      <Setter Property="Padding" Value="16,4"/>
+    </Style>
+    <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="#33334A"/>
+    </Style>
+    <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+      <Setter Property="Background" Value="#7C6CF0"/>
+    </Style>
+    <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="#7C6CF0"/>
+    </Style>
+    <!-- buttons: flat, centered content; hover LIGHTENS the actual background color (no opacity fade) -->
+    <Style Selector="Button">
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="HorizontalContentAlignment" Value="Center"/>
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Name="root"
+                  Background="{TemplateBinding Background}"
+                  CornerRadius="{TemplateBinding CornerRadius}">
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                              Margin="{TemplateBinding Padding}"/>
+          </Border>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="Button:pointerover /template/ Border#root">
+      <Setter Property="Background" Value="{Binding $parent[Button].Tag}"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    <Style Selector="Button:focus /template/ Border#root">
+      <Setter Property="Background" Value="{Binding $parent[Button].Tag}"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    <Style Selector="Button:pressed /template/ Border#root">
+      <Setter Property="Background" Value="{Binding $parent[Button].Tag}"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    <!-- kill the theme focus ring: keep the same (lighter) background in :focus as in :pointerover -->
+    <Style Selector="Button:focus /template/ Border#root">
+      <Setter Property="Background" Value="{Binding $parent[Button].Tag}"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    <Style Selector="Button:focus:pointerover /template/ Border#root">
+      <Setter Property="Background" Value="{Binding $parent[Button].Tag}"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    <!-- hover/focus/pressed: force the template ContentPresenter transparent (kills any theme-drawn box around the text) -->
+    <Style Selector="Button /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    <Style Selector="Button:focus /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    <Style Selector="Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    <!-- button text: always white, no focus ring around the label -->
+    <Style Selector="Button TextBlock">
+      <Setter Property="Foreground" Value="White"/>
+    </Style>
+    <Style Selector="Button:pointerover TextBlock">
+      <Setter Property="Foreground" Value="White"/>
+    </Style>
+    <Style Selector="Button:pressed TextBlock">
+      <Setter Property="Foreground" Value="White"/>
+    </Style>
+    <!-- checkbox label: white, steady on hover (no accent highlight) -->
+    <Style Selector="CheckBox /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Foreground" Value="White"/>
+    </Style>
+    <Style Selector="CheckBox:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Foreground" Value="White"/>
+    </Style>
+    <Style Selector="CheckBox:pressed /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Foreground" Value="White"/>
+    </Style>
+    <!-- log textbox: steady background, no hover highlight, subtle border -->
+    <Style Selector="TextBox">
+      <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+    <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="#2B2B3C"/>
+      <Setter Property="BorderBrush" Value="#3A3A52"/>
+    </Style>
+    <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="#2B2B3C"/>
+      <Setter Property="BorderBrush" Value="#3A3A52"/>
+    </Style>
+  </Window.Styles>
+
+  <DockPanel Margin="16,42,16,12">
+
+    <!-- header: left column matches the providers card, ACTIVE block sits on the MODELS column x -->
+    <Grid DockPanel.Dock="Top" ColumnDefinitions="268,16,*" Margin="0,4,0,10">
+      <StackPanel Grid.Column="0">
+        <TextBlock Text="Codex Provider Manager" FontSize="17" FontWeight="Bold" Foreground="#EDEDF5"/>
+        <TextBlock Text="providers &amp; models for Codex desktop / CLI" FontSize="11" Foreground="#9C9CB4"/>
+      </StackPanel>
+      <StackPanel Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center">
+        <TextBlock Text="ACTIVE" FontSize="10" FontWeight="Bold" Foreground="#7C6CF0"/>
+        <TextBlock x:Name="LblActive" Text="-" FontSize="12" Foreground="#EDEDF5"/>
+      </StackPanel>
+    </Grid>
+
+    <!-- bottom actions: SAME column structure as the cards (268,16,*) so every button is flush with its card -->
+    <StackPanel DockPanel.Dock="Bottom" Spacing="10">
+      <Grid ColumnDefinitions="268,16,*,16">
+        <Button x:Name="BtnActivate" Grid.Column="0" Content="Activate provider" Height="34"
+                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                 Tag="#A398F4" Background="#7C6CF0" Foreground="White" CornerRadius="8" Click="OnActivate"/>
+        <Button x:Name="BtnUseModel" Grid.Column="2" Content="Use selected model" Height="34"
+                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                 Tag="#707080" Background="#33334A" Foreground="#EDEDF5" CornerRadius="8" Click="OnUseModel"/>
+      </Grid>
+      <Grid ColumnDefinitions="268,16,*,16">
+        <Grid Grid.Column="0" ColumnDefinitions="*,8,*,8,*">
+          <Button x:Name="BtnAdd" Grid.Column="0" Content="Add" Height="30"
+                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                   Tag="#707080" Background="#33334A" Foreground="#EDEDF5" CornerRadius="8" Click="OnAddProvider"/>
+          <Button x:Name="BtnEdit" Grid.Column="2" Content="Edit" Height="30"
+                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                   Tag="#707080" Background="#33334A" Foreground="#EDEDF5" CornerRadius="8" Click="OnEditProvider"/>
+          <Button x:Name="BtnRemove" Grid.Column="4" Content="Remove" Height="30"
+                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                   Tag="#707080" Background="#33334A" Foreground="#EDEDF5" CornerRadius="8" Click="OnRemoveProvider"/>
+        </Grid>
+        <Button x:Name="BtnRestart" Grid.Column="2" Content="Restart now" Width="120" Height="30"
+                HorizontalAlignment="Right"
+                 Tag="#707080" Background="#33334A" Foreground="#EDEDF5" CornerRadius="8" Click="OnRestartNow"/>
+      </Grid>
+      <Grid ColumnDefinitions="*,10,Auto">
+        <CheckBox x:Name="ChkRestart" Content="Restart desktop app after the switch" FontSize="13.5" FontWeight="SemiBold"
+                  Foreground="White" VerticalAlignment="Center"
+                  Checked="OnRestartCheckChanged" Unchecked="OnRestartCheckChanged"/>
+        <Button x:Name="BtnRestoreOpenai" Grid.Column="2" Content="Restore OpenAI" Width="150" Height="30"
+                Background="#5A5A78" Foreground="White" CornerRadius="8" Click="OnRestoreOpenai"/>
+      </Grid>
+      <TextBox x:Name="TxtLog" IsReadOnly="True" Height="110" Background="#2B2B3C" Foreground="#EDEDF5"
+               CaretBrush="#EDEDF5"
+               BorderBrush="#3A3A52" TextWrapping="Wrap" AcceptsReturn="True"/>
+    </StackPanel>
+
+    <!-- two cards: bottom gap so the buttons never stick to the lists -->
+    <Grid ColumnDefinitions="268,16,*,16" Margin="0,0,0,6">
+
+      <!-- providers card -->
+      <Border Grid.Column="0" Background="#262635" BorderBrush="#3A3A52" BorderThickness="1" CornerRadius="10" Padding="12">
+        <DockPanel>
+          <TextBlock DockPanel.Dock="Top" Text="PROVIDERS" FontSize="10" FontWeight="Bold" Foreground="#9C9CB4" Margin="0,0,0,8"/>
+          <ListBox x:Name="LstProviders" Background="Transparent" BorderThickness="0" Margin="0,0,0,4"
+                   SelectionChanged="OnProviderSelected">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding}" TextTrimming="CharacterEllipsis" Foreground="#EDEDF5"
+                           VerticalAlignment="Center"/>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </DockPanel>
+      </Border>
+
+      <!-- models card -->
+      <Border Grid.Column="2" Background="#262635" BorderBrush="#3A3A52" BorderThickness="1" CornerRadius="10" Padding="12">
+        <DockPanel>
+          <TextBlock DockPanel.Dock="Top" Text="MODELS" FontSize="10" FontWeight="Bold" Foreground="#9C9CB4" Margin="0,0,0,6"/>
+          <TextBox DockPanel.Dock="Top" x:Name="TxtSearch" Watermark="search models..." Background="#303045" Foreground="#EDEDF5"
+                   BorderBrush="#3A3A52" CornerRadius="6" Height="30" Margin="0,0,0,8" TextChanged="OnSearchChanged"/>
+          <ListBox x:Name="LstModels" Background="Transparent" BorderThickness="0">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding}" TextTrimming="CharacterEllipsis" Foreground="#EDEDF5"
+                           VerticalAlignment="Center"/>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </DockPanel>
+      </Border>
+    </Grid>
+  </DockPanel>
+</Window>
